@@ -1,0 +1,4 @@
+pip3 install 'google-api-python-client==1.7.2'
+pip3 install 'google-auth==1.8.0'
+pip3 install 'google-auth-httplib2==0.0.3'
+pip3 install 'google-auth-oauthlib==0.4.1'
