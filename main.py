@@ -30,7 +30,7 @@ def spotify_to_list(link):
     data = response.json()
     tracks = data['items']
     track_names = [track['track']['name'] for track in tracks]
-    print(track_names)
+    # print(track_names)
     # lista = ["""jesteś ładniejsza niż na zdjęciach""", """Bedoesiara""", """Koloska i szlugi"""]
     return track_names
 
@@ -40,12 +40,15 @@ def main():
     spoti_link = input("Link to Spitify playlist: ")
     service = build('youtube', 'v3', developerKey=api_key)
     list_song = spotify_to_list(spoti_link)
-    print(f"pobieranie {len(list_song)} utworow")
+    num_songs = len(list_song)
+    print(f"Downloading {num_songs} tracks")
 
     list_downloaded_song = [os.path.splitext(file)[0] for file in os.listdir(downlanding_path) if file.endswith('.mp3')]
+    i = 0
     for song in list_song:
+        i += 1
         if(song in list_downloaded_song):
-            print(f"masz już pobrane: {song}")
+            print(f"this track has already been downloaded: {song}")
             continue
         request = service.search().list(
             part="id",
@@ -55,9 +58,9 @@ def main():
         )
         response = request.execute()
         video_id = response['items'][0]['id']['videoId']
-        print(f"Download {song} ...")
+        print(f"{i}/{num_songs} Download {song} ...")
         YouTube(f"https://www.youtube.com/watch?v={video_id}").streams.get_audio_only().download(output_path=downlanding_path, filename=f"{song}.mp3")
-        print(f"utwór {song} został pobrany!")
+        print(f"Track {song} has been downloaded!")
 
 
 if __name__ == "__main__":
